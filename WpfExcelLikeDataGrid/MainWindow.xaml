@@ -1,0 +1,26 @@
+﻿<Window x:Class="WpfExcelLikeDataGrid.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WpfExcelLikeDataGrid"
+        Title="Excel-Like DataGrid" Height="450" Width="800"
+        KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+
+    <Window.Resources>
+        <local:StartsWithSValueConverter x:Key="StartsWithSValueConverter"/>
+        <local:SameValueToColorConverter x:Key="SameValueToColorConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <DataGrid x:Name="ExcelLikeDataGrid" AutoGenerateColumns="False" SelectionUnit="Cell" ClipboardCopyMode="None" CanUserAddRows="False" CanUserDeleteRows="False" RowEditEnding="ExcelLikeDataGrid_RowEditEnding" ContextMenuOpening="ExcelLikeDataGrid_ContextMenuOpening" PreviewKeyDown="ExcelLikeDataGrid_PreviewKeyDown">
+          
+
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Add Row" Click="AddRow_Click"/>
+                    <MenuItem Header="Delete Row" Click="DeleteRow_Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
+    </Grid>
+</Window>
+
