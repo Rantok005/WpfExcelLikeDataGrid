@@ -90,6 +90,8 @@ namespace WpfExcelLikeDataGrid
 
         private void PasteExecuted(object sender, ExecutedRoutedEventArgs e)
         {
+            bool pastingIntoCopiedCell = false;
+
             // Get the starting cell for the paste operation
             DataGridCellInfo startCell = SelectedCells.First();
 
@@ -120,6 +122,13 @@ namespace WpfExcelLikeDataGrid
                     // Set the value of the cell
                     if (cell != null)
                     {
+                        // Check if the cell is in the copiedCells list
+                        DataGridCellInfo cellInfo = new DataGridCellInfo(cell.DataContext, cell.Column);
+                        if (ContainsCell(copiedCells, cellInfo))
+                        {
+                            pastingIntoCopiedCell = true;
+                        }
+
                         // Begin the row edit
                         this.BeginEdit();
 
@@ -151,7 +160,24 @@ namespace WpfExcelLikeDataGrid
                     }
                 }
             }
+            //If we were pasting into copiedCell, we will clear the coppiedCell
+            if (pastingIntoCopiedCell) ClearOldShit();
+
             e.Handled = true;
+        }
+
+        private bool ContainsCell(List<DataGridCellInfo> cells, DataGridCellInfo cell)
+        {
+            foreach (DataGridCellInfo existingCell in cells)
+            {
+                // Compare the Item and Column properties
+                if (ReferenceEquals(existingCell.Item, cell.Item) && existingCell.Column == cell.Column)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public DataGridCell GetCell(DataGrid grid, DataGridCellInfo cellInfo)
@@ -163,8 +189,5 @@ namespace WpfExcelLikeDataGrid
             }
             return null;
         }
-
-        //TODO: When pasting to same cell which was copied need to coppiedCells.Clear() + revert style changes!!
-
     }
 }
